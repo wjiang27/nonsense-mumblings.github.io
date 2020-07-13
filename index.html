@@ -53,16 +53,16 @@
 <link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
 
 
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-xfc.png?v=5.1.4">
 
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/xfc-32x32.jpg?v=5.1.4">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/xfc-16x16.jpg?v=5.1.4">
 
 
-  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+  <link rel="mask-icon" href="/images/logo-camel.svg?v=5.1.4" color="#222">
 
 
 
@@ -234,7 +234,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="W Jiang">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/xfc-64x64-next.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -300,74 +300,16 @@
       
         
           
-            <h1 id="经典排序算法的C-实现"><a href="#经典排序算法的C-实现" class="headerlink" title="经典排序算法的C++实现"></a>经典排序算法的C++实现</h1><p>[TOC]</p>
-<h2 id="C-标准库-STL-中的一些排序算法"><a href="#C-标准库-STL-中的一些排序算法" class="headerlink" title="C++标准库(STL)中的一些排序算法"></a>C++标准库(STL)中的一些排序算法</h2><h4 id="std-sort-RandomIt-first-RandomIt-last-Compare-comp"><a href="#std-sort-RandomIt-first-RandomIt-last-Compare-comp" class="headerlink" title="std::sort(RandomIt first, RandomIt last, Compare comp);"></a>std::sort(RandomIt first, RandomIt last, Compare comp);</h4><p>以不降序对<code>[first, middle)</code>中的元素进行排序，属于<strong>不稳定</strong>排序，时间复杂度为$O(N\cdot\log(N))$。该算法要求迭代器是随机访问迭代器，否则将变得十分低效。可以自己定义比较方法comp，比较方便的方式是使用以引用为对象的lambda表达式。</p>
-<p>值得注意的是，当忽略第三个参数而使用默认比较函数的时候，sort算法<strong>并非</strong>单纯的快速排序，而是<strong>快速排序</strong>和<strong>插入排序/堆排序</strong>相结合。当分段后的数据量较小时，算法改用<strong>插入排序</strong>；当递归层数过深时，算法改用<strong>堆排序</strong>。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; v = &#123;<span class="number">3</span>, <span class="number">1</span>, <span class="number">5</span>, <span class="number">2</span>, <span class="number">0</span>&#125;;</span><br><span class="line">sort(v.<span class="built_in">begin</span>(), v.<span class="built_in">end</span>(), [](<span class="keyword">int</span>&amp; a, <span class="keyword">int</span>&amp; b)&#123; <span class="keyword">return</span> a &gt; b; &#125;);</span><br><span class="line"><span class="comment">//等价于 sort(v.begin(), v.end(), std::greater&lt;int&gt;());</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Output: 5 3 2 1 0</span><br></pre></td></tr></table></figure>
-
-<h4 id="std-partition"><a href="#std-partition" class="headerlink" title="std::partition"></a>std::partition</h4><p>将满足条件的元素置于前面，不满足条件的置于后面，返回第一个<strong>不满足条件</strong>元素的迭代器。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; v = &#123;<span class="number">3</span>, <span class="number">1</span>, <span class="number">5</span>, <span class="number">2</span>, <span class="number">0</span>&#125;;</span><br><span class="line"><span class="keyword">auto</span> it = partition(v.<span class="built_in">begin</span>(), v.<span class="built_in">end</span>(), [](<span class="keyword">int</span>&amp; a)&#123; <span class="keyword">return</span> a &gt; <span class="number">2</span>; &#125;);</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Output: 3 5 1 2 0</span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="std-partial-sort"><a href="#std-partial-sort" class="headerlink" title="std::partial_sort"></a>std::partial_sort</h4><p>重排元素，使得范围 <code>[first, middle)</code> 含有范围 <code>[first, last)</code> 中已排序的 <code>middle - first</code> 个最小元素。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">array&lt;int, 10&gt; s&#123;5, 7, 4, 2, 8, 6, 1, 9, 0, 3&#125;;</span><br><span class="line">partial_sort(s.begin(), s.begin() + 3, s.end());</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Output: 0 1 2 7 8 6 5 9 4 3</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h2><h4 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h4><p>从数组中选择最小元素，将它与第一个元素交换位置；再从第二个元素开始重复之，直到将整个数组排序。<strong>不稳定排序</strong>，时间复杂度$O(N^2)$，运行时间与输入无关。</p>
-<h4 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">selectionSort</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> minIndex = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; A.<span class="built_in">size</span>(); i++) &#123;</span><br><span class="line">        minIndex = i;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; A.<span class="built_in">size</span>(); j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (A[j] &lt; A[i]) minIndex = j;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (minIndex != i) swap(A[i], A[minIndex]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h2><h4 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h4><p>在一个序列中选择一个基准数，通过swap操作，将比基准数小的数字全部放在其左边，比基准数大的全部放在其右边。然后在左右两边重复该操作。快速排序是<strong>不稳定</strong>排序，时间复杂度从$O(N)$到$O(N^2)$。值得注意的是，下标实现中，如果取基数为左侧头，则应先移动右侧指针，保证最后和头部交换的元素是属于前半部分的元素。</p>
-<h4 id="C-屌丝实现"><a href="#C-屌丝实现" class="headerlink" title="C++屌丝实现"></a>C++屌丝实现</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">quickSort</span><span class="params">(<span class="keyword">int</span> left, <span class="keyword">int</span> right, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; arr)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (left &gt;= right) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> i, j, base, temp;</span><br><span class="line">    i = left, j = right;</span><br><span class="line">    base = arr[left];  <span class="comment">//取最左边的数为基准数</span></span><br><span class="line">    <span class="keyword">while</span> (i &lt; j)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">while</span> (arr[j] &gt;= base &amp;&amp; i &lt; j) j--;</span><br><span class="line">        <span class="keyword">while</span> (arr[i] &lt;= base &amp;&amp; i &lt; j) i++;</span><br><span class="line">        <span class="keyword">if</span> (i &lt; j) swap(arr[i], arr[j]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//基准数归位</span></span><br><span class="line">    swap(arr[left], arr[i]);</span><br><span class="line">    quickSort(left, i - <span class="number">1</span>, arr);<span class="comment">//递归左边</span></span><br><span class="line">    quickSort(i + <span class="number">1</span>, right, arr);<span class="comment">//递归右边</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="C-造轮子实现"><a href="#C-造轮子实现" class="headerlink" title="C++造轮子实现"></a>C++造轮子实现</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">myPartition</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="keyword">int</span> l, <span class="keyword">int</span> h, <span class="keyword">int</span> p, <span class="keyword">bool</span> eq)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// eq为真时，判别条件是小于等于；否则是小于。</span></span><br><span class="line">    <span class="keyword">if</span> (h == l) <span class="keyword">return</span> l;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = l; i &lt;= h; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!eq &amp;&amp; A[i] &lt; p) &#123;</span><br><span class="line">            swap(A[i], A[l]);</span><br><span class="line">            l++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (eq &amp;&amp; A[i] &lt;= p) &#123;</span><br><span class="line">            swap(A[i], A[l]);</span><br><span class="line">            l++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> l;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">quickSortHelper</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="keyword">int</span> l, <span class="keyword">int</span> h)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (h &lt;= l) <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">int</span> base = A[l];</span><br><span class="line">    <span class="keyword">int</span> pivot1 = myPartition(A, l, h, base, <span class="literal">false</span>);</span><br><span class="line">    <span class="keyword">int</span> pivot2 = myPartition(A, pivot1, h, base, <span class="literal">true</span>);</span><br><span class="line">    quickSortHelper(A, l, pivot1);</span><br><span class="line">    quickSortHelper(A, pivot2, h);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">quickSort</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A)</span> </span>&#123;</span><br><span class="line">    quickSortHelper(A, <span class="number">0</span>, A.<span class="built_in">size</span>()<span class="number">-1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="C-标准写法"><a href="#C-标准写法" class="headerlink" title="C++标准写法"></a>C++标准写法</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iterator&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">ForwardIt</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">void</span> <span class="title">quickSort</span>(<span class="title">ForwardIt</span> <span class="title">first</span>, <span class="title">ForwardIt</span> <span class="title">last</span>) &#123;</span></span><br><span class="line">    <span class="keyword">if</span> (first == last) <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">auto</span> pivot = *next(first, distance(first, last)/<span class="number">2</span>);</span><br><span class="line">    ForwardIt middle1 = partition(first, last,</span><br><span class="line">        [pivot](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; em) &#123; <span class="keyword">return</span> em &lt; pivot; &#125;);</span><br><span class="line">    ForwardIt middle2 = partition(middle1, last,</span><br><span class="line">        [pivot](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; em) &#123; <span class="keyword">return</span> !(pivot &lt; em); &#125;);</span><br><span class="line">    <span class="comment">// middle1是指向第一个不小于基准元素的迭代器，middle2是指向第一个大于基准元素的迭代器</span></span><br><span class="line">    quickSort(first, middle1);</span><br><span class="line">    quickSort(middle2, last);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; v = &#123;<span class="number">3</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">-10</span>&#125;;</span><br><span class="line">    quickSort(<span class="built_in">begin</span>(v), <span class="built_in">end</span>(v));</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span>&amp; e : v) <span class="built_in">cout</span> &lt;&lt; e &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h2><h4 id="原理-2"><a href="#原理-2" class="headerlink" title="原理"></a>原理</h4><p>从左向右不断交换相邻逆序的元素直到结束，此时最大元素位于队尾。重复该过程直到一次循环中没有出现交换。<strong>稳定</strong>排序，时间复杂度为$O(N^2)$。</p>
-<h4 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">bubbleSort</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">bool</span> isSorted = <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = A.<span class="built_in">size</span>() - <span class="number">1</span>; i &gt;= <span class="number">0</span> &amp;&amp; !isSorted; i--) &#123;</span><br><span class="line">        isSorted = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; i; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (A[j + <span class="number">1</span>] &lt; A[j]) &#123;</span><br><span class="line">                swap(A[j + <span class="number">1</span>], A[j]);</span><br><span class="line">                isSorted = <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h2><h4 id="原理-3"><a href="#原理-3" class="headerlink" title="原理"></a>原理</h4><p>将新元素插入左侧已经排序的数组，维持已排序数组的有序性。<strong>稳定</strong>排序，时间复杂度为$O(N^2)$。</p>
-<h4 id="代码实现-2"><a href="#代码实现-2" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">insertionSort</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; A.<span class="built_in">size</span>(); i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = i; j &gt; <span class="number">0</span> &amp;&amp; A[j] &lt; A[j - <span class="number">1</span>]; j--) &#123;</span><br><span class="line">            swap(A[j], A[j - <span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="希尔排序"><a href="#希尔排序" class="headerlink" title="希尔排序"></a>希尔排序</h2><h4 id="原理-4"><a href="#原理-4" class="headerlink" title="原理"></a>原理</h4><p>使用插入排序对间隔为h的序列进行排序，并且每次减小h直到<code>h=1</code>。 非稳定排序，时间复杂度平均为$O(N^{1.3})$。</p>
-<h4 id="代码实现-3"><a href="#代码实现-3" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">shellSort</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> h = <span class="number">1</span>, N = A.<span class="built_in">size</span>();</span><br><span class="line">    <span class="keyword">while</span> (h &lt; N / <span class="number">3</span>) h = <span class="number">3</span> * h + <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (h &gt;= <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = h; i &lt; N; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = i; j &gt;= h &amp;&amp; A[j] &lt; A[j - h]; j -= h) &#123;</span><br><span class="line">                swap(A[j], A[j - h]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        h /= <span class="number">3</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h2><h4 id="原理-5"><a href="#原理-5" class="headerlink" title="原理"></a>原理</h4><p>每次都将数组一分为二，各自排序后再组合。稳定排序，时间复杂度为$O(N\log(N))$。</p>
-<h4 id="代码实现-4"><a href="#代码实现-4" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">mergeSort</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; Sup;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">merge</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="keyword">int</span> l, <span class="keyword">int</span> m, <span class="keyword">int</span> h)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 合并左右两侧有序数组</span></span><br><span class="line">        <span class="keyword">int</span> i = l, j = m + <span class="number">1</span>;</span><br><span class="line">        Sup = A;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> k = l; k &lt;= h; k++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (i &gt; m) A[k] = Sup[j++]; <span class="comment">// 左侧到头</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (j &gt; h) A[k] = Sup[i++]; <span class="comment">// 右侧到头</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (Sup[i] &lt; Sup[j]) A[k] = Sup[i++]; <span class="comment">// 稳定</span></span><br><span class="line">            <span class="keyword">else</span> A[k] = Sup[j++];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">sort</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A)</span> </span>&#123;</span><br><span class="line">        Sup.<span class="built_in">clear</span>();</span><br><span class="line">        sort(A, <span class="number">0</span>, A.<span class="built_in">size</span>() - <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">sort</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="keyword">int</span> l, <span class="keyword">int</span> h)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 分治</span></span><br><span class="line">        <span class="keyword">if</span> (h &lt;= l) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> mid = l + (h - l) / <span class="number">2</span>;</span><br><span class="line">        sort(A, l, mid);</span><br><span class="line">        sort(A, mid + <span class="number">1</span>, h);</span><br><span class="line">        merge(A, l, mid, h);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h2><h4 id="原理-6"><a href="#原理-6" class="headerlink" title="原理"></a>原理</h4><p>堆是一个每个节点都大于/小于它的子节点的完全二叉树。在堆中插入元素和删除最大元素的时间复杂度都是$\log(N)$。</p>
-<p>堆排序的流程是建堆和堆的调整，下面以最大堆为例进行说明。</p>
-<ol>
-<li>建堆：可以把数组通过层序遍历来看作完全二叉树，建堆时应从最后一个非叶子节点<code>(len-1)/2</code>开始，找出其和子节点中最大值并交换到父节点上。之后向前寻找前一个节点并重复建堆操作。需要注意的是交换完子节点和父节点后，子节点并不能保证比子节点的两个节点更大，因此需要递归进行建堆。</li>
-<li>堆的调整：当完成一次遍历后，将数组头部（堆顶）的值放在数组末尾，并对其前面的部分继续循环重复建堆。</li>
-</ol>
-<p>堆排序是<strong>不稳定</strong>排序，时间复杂度是$N\cdot\log(N)$。</p>
-<h4 id="代码实现-5"><a href="#代码实现-5" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">heapSort</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">makeHeap</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="keyword">int</span> len, <span class="keyword">int</span> idx)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> l = idx * <span class="number">2</span> + <span class="number">1</span>, r = idx * <span class="number">2</span> + <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">int</span> maxIdx = idx;</span><br><span class="line">        <span class="keyword">if</span> (l &lt; len &amp;&amp; A[l] &gt; A[maxIdx]) maxIdx = l;</span><br><span class="line">        <span class="keyword">if</span> (r &lt; len &amp;&amp; A[r] &gt; A[maxIdx]) maxIdx = r;</span><br><span class="line">        <span class="keyword">if</span> (maxIdx != idx) &#123; </span><br><span class="line">            swap(A[maxIdx], A[idx]);</span><br><span class="line">            makeHeap(A, len, maxIdx); <span class="comment">// 将较小的值继续下沉</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">sort</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 从最后一个非叶子节点开始调整</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = A.<span class="built_in">size</span>() / <span class="number">2</span> - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) makeHeap(A, A.<span class="built_in">size</span>(), i);</span><br><span class="line">        <span class="comment">// 将当前最大的放置容器末尾，继续对前面未排序的部分进行排序</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = A.<span class="built_in">size</span>() - <span class="number">1</span>; i &gt;= <span class="number">1</span>; i--) &#123;</span><br><span class="line">            swap(A[<span class="number">0</span>], A[i]);</span><br><span class="line">            makeHeap(A, i, <span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-
-          
+          经典排序算法的C++实现[TOC]
+C++标准库(STL)中的一些排序算法std::sort(RandomIt first, RandomIt last, Compare comp);以不降序对[first, middle)中的元素进行排序，属于不稳定排序，时间复杂度为$O(N\cdot\log(N
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/%E6%8E%92%E5%BA%8F/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -419,7 +361,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="W Jiang">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/xfc-64x64-next.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -485,13 +427,20 @@
       
         
           
-            <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cout</span> &lt;&lt; <span class="string">"Welcome!"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br></pre></td></tr></table></figure>
+          1cout &lt;&lt; "Welcome!" &lt;&lt; endl;
 
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cout</span> &lt;&lt; <span class="string">"W Jiang"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br></pre></td></tr></table></figure>
+1cout &lt;&lt; "W Jiang" &lt;&lt; endl;
 
 
 
           
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/Welcome/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -560,6 +509,10 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
+              <img class="site-author-image" itemprop="image"
+                src="/images/xfc-64x64-next.jpg"
+                alt="W Jiang" />
+            
               <p class="site-author-name" itemprop="name">W Jiang</p>
               <p class="site-description motion-element" itemprop="description"></p>
           </div>
@@ -586,11 +539,41 @@
           
 
           
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wjiang27" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:j.fredsway@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
 
           
           
 
           
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://xyfu.me/" title="xyfu" target="_blank">xyfu</a>
+                  </li>
+                
+              </ul>
+            </div>
           
 
           
@@ -614,7 +597,7 @@
       <div class="footer-inner">
         <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
-    <i class="fa fa-user"></i>
+    <i class="fa fa-[object Object]"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">W Jiang</span>
 
@@ -622,15 +605,9 @@
 </div>
 
 
-  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
-  <span class="post-meta-divider">|</span>
-
-
-
-  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
 
 
 
